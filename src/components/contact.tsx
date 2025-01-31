@@ -11,6 +11,19 @@ import ContactCard from "./contact-card";
 export default function Contact() {
   const { ref } = useSectionInView("#contact");
 
+  // Coordinates for the shop's location
+  const shopCoordinates = {
+    latitude: 35.668652, // Replace with your latitude
+    longitude: 51.350097, // Replace with your longitude
+  };
+
+  // Function to handle map click
+  const handleMapClick = () => {
+    const { latitude, longitude } = shopCoordinates;
+    const openStreetMapUrl = `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=16/${latitude}/${longitude}`;
+    window.open(openStreetMapUrl, "_blank");
+  };
+
   return (
     <motion.section
       id="contact"
@@ -59,6 +72,27 @@ export default function Contact() {
         />
       </div>
 
+      {/* Map Section */}
+      <div
+        className="mt-8 border rounded-lg overflow-hidden cursor-pointer"
+        onClick={handleMapClick}
+      >
+        {/* Embed OpenStreetMap */}
+        <iframe
+          title="Shop Location"
+          src={`https://www.openstreetmap.org/export/embed.html?bbox=${
+            shopCoordinates.longitude - 0.01
+          }%2C${shopCoordinates.latitude - 0.01}%2C${
+            shopCoordinates.longitude + 0.01
+          }%2C${shopCoordinates.latitude + 0.01}&layer=mapnik&marker=${
+            shopCoordinates.latitude
+          }%2C${shopCoordinates.longitude}`}
+          width="100%"
+          height="300"
+          className="border-none"
+        ></iframe>
+      </div>
+
       {/* Contact Form */}
       <form className="mt-10 flex flex-col dark:text-black">
         <input
@@ -72,7 +106,7 @@ export default function Contact() {
         <textarea
           className="h-52 my-3 rounded-lg resize-none borderBlack p-4 dark:bg-white dark:bg-opacity-20 dark:focus:bg-opacity-10 transition-all dark:outline-none"
           name="message"
-          placeholder={"Your "}
+          placeholder={"Your message"}
           required
           maxLength={5000}
         />
